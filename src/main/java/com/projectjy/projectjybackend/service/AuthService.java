@@ -37,7 +37,18 @@ public class AuthService {
 
     public TokenDto login(MemberRequestDto requestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
-        return tokenProvider.generateTokenDto( managerBuilder.getObject().authenticate(authenticationToken));
+        return tokenProvider.generateTokenDto(managerBuilder.getObject().authenticate(authenticationToken));
     }
 
+    public Boolean checkMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
+
+    public Boolean checkEmail(String email) {
+        return memberRepository.existsByEmail(email);
+    }
+
+    public Boolean checkNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
 }
