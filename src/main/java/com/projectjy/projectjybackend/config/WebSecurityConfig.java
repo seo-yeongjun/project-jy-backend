@@ -46,7 +46,9 @@ public class WebSecurityConfig {
 
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler)
 
-                .and().authorizeRequests().antMatchers("/auth/**").permitAll().anyRequest().authenticated()
+                .and().authorizeRequests().antMatchers("/auth/**").permitAll()
+                .and().authorizeRequests().antMatchers("/info/**").permitAll()
+                .anyRequest().authenticated()
 
                 .and().apply(new JwtSecurityConfig(tokenProvider));
 
@@ -57,7 +59,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(false); // 쿠키를 받을건지
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","192.168.10:3002,","192.168.10:3000","192.168.10:3003"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
 
         configuration.addAllowedHeader("*");

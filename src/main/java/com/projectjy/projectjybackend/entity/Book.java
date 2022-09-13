@@ -21,4 +21,5 @@ public class Book {
     private String publisher;
     private String author;
     private String code;
+    private String thumbnail;
 }

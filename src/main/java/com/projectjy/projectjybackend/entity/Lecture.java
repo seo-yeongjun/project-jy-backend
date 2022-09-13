@@ -15,10 +15,7 @@ public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long professorId;
-
     private String title;
-    private String code;
+    private String departmentId;
 
 }
