@@ -2,12 +2,12 @@ package com.projectjy.projectjybackend.controller;
 
 import com.projectjy.projectjybackend.entity.Department;
 import com.projectjy.projectjybackend.service.DepartmentService;
+import com.projectjy.projectjybackend.service.NaverAPI;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
 public class InfoController {
 
     private final DepartmentService departmentService;
+    private final NaverAPI naverAPI;
 
     @GetMapping("/allDepartments")
     public ResponseEntity<List<Department>> getDepartment() {
@@ -31,5 +32,13 @@ public class InfoController {
     @GetMapping("/department/name/{name}")
     public ResponseEntity<List<Department>> getDepartmentByName(@PathVariable String name) {
         return ResponseEntity.ok(departmentService.getDepartmentByName(name));
+    }
+
+    @GetMapping("/findBook")
+    public ResponseEntity<JSONObject> getPlace(@RequestParam("query") String query) throws Exception {
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse(naverAPI.search(query));
+        JSONObject jsonObj = (JSONObject) obj;
+        return ResponseEntity.ok(jsonObj);
     }
 }
