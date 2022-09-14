@@ -59,7 +59,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(false); // 쿠키를 받을건지
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","192.168.10:3002,","192.168.10:3000","192.168.10:3003"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","192.168.10:3002,","192.168.10:3000","192.168.10:3003","127.0.0.1:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
 
         configuration.addAllowedHeader("*");
