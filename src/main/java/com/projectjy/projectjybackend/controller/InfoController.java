@@ -1,7 +1,9 @@
 package com.projectjy.projectjybackend.controller;
 
 import com.projectjy.projectjybackend.entity.Department;
+import com.projectjy.projectjybackend.entity.Lecture;
 import com.projectjy.projectjybackend.service.DepartmentService;
+import com.projectjy.projectjybackend.service.LectureService;
 import com.projectjy.projectjybackend.service.NaverAPI;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -17,6 +19,7 @@ import java.util.List;
 public class InfoController {
 
     private final DepartmentService departmentService;
+    private final LectureService lectureService;
     private final NaverAPI naverAPI;
 
     @GetMapping("/allDepartments")
@@ -40,5 +43,9 @@ public class InfoController {
         Object obj = parser.parse(naverAPI.search(query));
         JSONObject jsonObj = (JSONObject) obj;
         return ResponseEntity.ok(jsonObj);
+    }
+    @GetMapping("/lecture/name/{name}")
+    public ResponseEntity<List<Lecture>> getLectureByName(@PathVariable String name) {
+        return ResponseEntity.ok(lectureService.getLecturesByName(name));
     }
 }

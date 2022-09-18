@@ -17,8 +17,10 @@ public class SaleBook {
     private Long id;
 
     private Long memId;
+    private Long lectureId;
     private Long bookId;
 
+    private String title;
     private String content;
     private boolean soldOut;
     private String connect;

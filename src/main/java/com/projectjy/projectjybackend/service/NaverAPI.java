@@ -25,7 +25,7 @@ public class NaverAPI {
         // 검색어 인코딩
         query = URLEncoder.encode(query, StandardCharsets.UTF_8);
         // URL 세팅
-        String apiURL = "https://openapi.naver.com/v1/search/book.json?query=" + query;
+        String apiURL = "https://openapi.naver.com/v1/search/book.json?display=20&query=" + query;
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
