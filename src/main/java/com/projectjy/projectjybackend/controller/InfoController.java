@@ -2,12 +2,15 @@ package com.projectjy.projectjybackend.controller;
 
 import com.projectjy.projectjybackend.entity.Department;
 import com.projectjy.projectjybackend.entity.Lecture;
+import com.projectjy.projectjybackend.entity.SaleBook;
 import com.projectjy.projectjybackend.service.DepartmentService;
 import com.projectjy.projectjybackend.service.LectureService;
 import com.projectjy.projectjybackend.service.NaverAPI;
+import com.projectjy.projectjybackend.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ public class InfoController {
 
     private final DepartmentService departmentService;
     private final LectureService lectureService;
+    private final SaleService saleService;
     private final NaverAPI naverAPI;
 
     @GetMapping("/allDepartments")
@@ -47,5 +51,15 @@ public class InfoController {
     @GetMapping("/lecture/name/{name}")
     public ResponseEntity<List<Lecture>> getLectureByName(@PathVariable String name) {
         return ResponseEntity.ok(lectureService.getLecturesByName(name));
+    }
+
+    @GetMapping("/book/count")
+    public ResponseEntity<Long> getBookCount() {
+        return ResponseEntity.ok(saleService.countBook());
+    }
+
+    @GetMapping("/book/page/{page}")
+    public ResponseEntity<Page<SaleBook>> getBookByPage(@PathVariable String page) {
+        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),20));
     }
 }
