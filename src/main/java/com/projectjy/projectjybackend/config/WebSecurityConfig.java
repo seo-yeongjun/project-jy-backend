@@ -1,9 +1,6 @@
 package com.projectjy.projectjybackend.config;
 
-import com.projectjy.projectjybackend.security.JwtAuthenticationEntryPoint;
-import com.projectjy.projectjybackend.security.JwtSecurityConfig;
-import com.projectjy.projectjybackend.security.TokenProvider;
-import com.projectjy.projectjybackend.security.JwtAccessDeniedHandler;
+import com.projectjy.projectjybackend.security.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
@@ -29,6 +28,8 @@ public class WebSecurityConfig {
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final CheckMemberInterceptor checkMemberInterceptor;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,10 +57,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                registry.addInterceptor(checkMemberInterceptor).addPathPatterns("/sale/**");
+            }
+        };
+    }
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(false); // 쿠키를 받을건지
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","192.168.10:3002,","192.168.10:3000","192.168.10:3003","127.0.0.1:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","192.168.10:3002,","192.168.10:3000","192.168.10:3003","127.0.0.1:3000","192.168.0.2:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
 
         configuration.addAllowedHeader("*");
