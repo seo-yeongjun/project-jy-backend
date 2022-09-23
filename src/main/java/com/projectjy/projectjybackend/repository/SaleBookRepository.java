@@ -9,5 +9,5 @@ import java.util.List;
 
 
 public interface SaleBookRepository extends JpaRepository<SaleBook, Long>, PagingAndSortingRepository<SaleBook, Long> {
-    List<SaleBook> findAllByMember(Member member);
+    List<SaleBook> findAllByMemberOrderByIdDesc(Member member);
 }

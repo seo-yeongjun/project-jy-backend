@@ -90,6 +90,9 @@ public class SaleService {
 
     public List<SaleBook> getSaleHistory(String memberId) {
         Member member = memberRepository.findByMemberId(memberId).orElseThrow();
-        return saleBookRepository.findAllByMember(member);
+        return saleBookRepository.findAllByMemberOrderByIdDesc(member).stream().peek(saleBook -> {
+            saleBook.getMember().setPassword(null);
+            saleBook.getMember().setAuthority(null);
+        }).collect(Collectors.toList());
     }
 }
