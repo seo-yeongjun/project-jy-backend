@@ -2,11 +2,9 @@ package com.projectjy.projectjybackend.controller;
 
 import com.projectjy.projectjybackend.entity.Department;
 import com.projectjy.projectjybackend.entity.Lecture;
+import com.projectjy.projectjybackend.entity.LectureReview;
 import com.projectjy.projectjybackend.entity.SaleBook;
-import com.projectjy.projectjybackend.service.DepartmentService;
-import com.projectjy.projectjybackend.service.LectureService;
-import com.projectjy.projectjybackend.service.NaverAPI;
-import com.projectjy.projectjybackend.service.SaleService;
+import com.projectjy.projectjybackend.service.*;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,6 +23,8 @@ public class InfoController {
     private final LectureService lectureService;
     private final SaleService saleService;
     private final NaverAPI naverAPI;
+
+    private final LectureReviewService lectureReviewService;
 
     @GetMapping("/allDepartments")
     public ResponseEntity<List<Department>> getDepartment() {
@@ -60,6 +60,11 @@ public class InfoController {
 
     @GetMapping("/book/page/{page}")
     public ResponseEntity<Page<SaleBook>> getBookByPage(@PathVariable String page) {
-        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),20));
+        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),4));
+    }
+
+    @GetMapping("/lectureReview/{lectureId}")
+    public ResponseEntity<List<LectureReview>> getLectureReviews(@PathVariable String lectureId) {
+        return ResponseEntity.ok(lectureReviewService.getLectureReviewsByLectureId(Long.parseLong(lectureId)));
     }
 }
