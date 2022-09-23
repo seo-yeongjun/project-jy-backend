@@ -60,7 +60,7 @@ public class InfoController {
 
     @GetMapping("/book/page/{page}")
     public ResponseEntity<Page<SaleBook>> getBookByPage(@PathVariable String page) {
-        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),4));
+        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),6));
     }
 
     @GetMapping("/lectureReview/{lectureId}")
