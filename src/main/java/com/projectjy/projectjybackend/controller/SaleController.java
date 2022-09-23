@@ -9,7 +9,7 @@ import com.projectjy.projectjybackend.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLOutput;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +26,10 @@ public class SaleController {
         SaleBook saleBook = saleBookDto.getSaleBook();
 
         return saleService.saveSale(book, saleBook, lecture, review, saleBookDto.getMemberId());
+    }
+
+    @GetMapping("/history/{memberId}")
+    public List<SaleBook> getSaleHistory(@PathVariable String memberId) {
+        return saleService.getSaleHistory(memberId);
     }
 }

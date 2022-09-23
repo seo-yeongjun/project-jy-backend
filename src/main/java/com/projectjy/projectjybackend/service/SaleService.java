@@ -9,11 +9,15 @@ import com.projectjy.projectjybackend.security.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +54,11 @@ public class SaleService {
 
             saleBook.setBook(savedBook);
             saleBook.setLecture(lecture);
+            saleBook.setDate(LocalDateTime.now());
             saleBook.setMember(savedMember.orElseThrow());
             if (review.getContent() != null && !review.getContent().equals("")) {
-                review.setMemId(savedMember.get().getId());
+                review.setMember(savedMember.get());
+                review.setDate(LocalDateTime.now());
                 lectureReviewRepository.save(review);
             }
 
@@ -70,7 +76,7 @@ public class SaleService {
     }
 
     public Page<SaleBook> getAllSaleBooksPageable(int page, int size) {
-        Page<SaleBook> saleBooks = saleBookRepository.findAll(PageRequest.of(page, size));
+        Page<SaleBook> saleBooks = saleBookRepository.findAll(PageRequest.of(page, size, Sort.Direction.DESC, "id"));
         saleBooks.map(saleBook -> {
             Member member = saleBook.getMember();
             member.setPassword(null);
@@ -80,5 +86,10 @@ public class SaleService {
             return saleBook;
         });
         return saleBooks;
+    }
+
+    public List<SaleBook> getSaleHistory(String memberId) {
+        Member member = memberRepository.findByMemberId(memberId).orElseThrow();
+        return saleBookRepository.findAllByMember(member);
     }
 }

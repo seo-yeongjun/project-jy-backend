@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,7 +28,9 @@ public class SaleBook {
     Book book;
 
     private String title;
+    private int price;
     private String content;
     private boolean soldOut;
     private String connect;
+    private LocalDateTime date;
 }
