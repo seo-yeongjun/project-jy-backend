@@ -32,4 +32,10 @@ public class SaleController {
     public List<SaleBook> getSaleHistory(@PathVariable String memberId) {
         return saleService.getSaleHistory(memberId);
     }
+
+    //soldOut change
+    @PostMapping("/complete/{id}")
+    public boolean soldOut(@PathVariable String id) {
+        return saleService.soldOutChange(id);
+    }
 }
