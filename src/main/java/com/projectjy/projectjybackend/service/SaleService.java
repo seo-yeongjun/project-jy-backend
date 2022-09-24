@@ -9,6 +9,7 @@ import com.projectjy.projectjybackend.security.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,10 +48,8 @@ public class SaleService {
             Book savedBook;
             Optional<Member> savedMember = memberRepository.findByMemberId(memberId);
 
-            if (!bookRepository.existsByCode(book.getCode()))
-                savedBook = bookRepository.save(book);
-            else
-                savedBook = bookRepository.findByCode(book.getCode());
+            if (!bookRepository.existsByCode(book.getCode())) savedBook = bookRepository.save(book);
+            else savedBook = bookRepository.findByCode(book.getCode());
 
             saleBook.setBook(savedBook);
             saleBook.setLecture(lecture);
@@ -76,7 +75,20 @@ public class SaleService {
     }
 
     public Page<SaleBook> getAllSaleBooksPageable(int page, int size) {
-        Page<SaleBook> saleBooks = saleBookRepository.findAll(PageRequest.of(page, size, Sort.Direction.DESC, "id"));
+        Page<SaleBook> saleBooks = saleBookRepository.findAll(PageRequest.of(page, size, Sort.Direction.DESC, "date"));
+        saleBooks.map(saleBook -> {
+            Member member = saleBook.getMember();
+            member.setPassword(null);
+            member.setMemberId(null);
+            member.setAuthority(null);
+            saleBook.setMember(member);
+            return saleBook;
+        });
+        return saleBooks;
+    }
+
+    public Page<SaleBook> getSearchSaleBooksPageable(int page, int size, String keyword) {
+        Page<SaleBook> saleBooks = saleBookRepository.findAllByBookTitleIsContainingOrLectureTitleIsContaining(keyword, keyword, PageRequest.of(page, size, Sort.Direction.DESC, "date"));
         saleBooks.map(saleBook -> {
             Member member = saleBook.getMember();
             member.setPassword(null);
@@ -94,5 +106,16 @@ public class SaleService {
             saleBook.getMember().setPassword(null);
             saleBook.getMember().setAuthority(null);
         }).collect(Collectors.toList());
+    }
+
+    public boolean soldOutChange(String id) {
+        try {
+            SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
+            saleBook.setSoldOut(!saleBook.isSoldOut());
+            saleBookRepository.save(saleBook);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

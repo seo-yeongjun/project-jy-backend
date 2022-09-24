@@ -48,6 +48,7 @@ public class InfoController {
         JSONObject jsonObj = (JSONObject) obj;
         return ResponseEntity.ok(jsonObj);
     }
+
     @GetMapping("/lecture/name/{name}")
     public ResponseEntity<List<Lecture>> getLectureByName(@PathVariable String name) {
         return ResponseEntity.ok(lectureService.getLecturesByName(name));
@@ -60,7 +61,12 @@ public class InfoController {
 
     @GetMapping("/book/page/{page}")
     public ResponseEntity<Page<SaleBook>> getBookByPage(@PathVariable String page) {
-        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page),6));
+        return ResponseEntity.ok(saleService.getAllSaleBooksPageable(Integer.parseInt(page), 6));
+    }
+
+    @GetMapping("/book/search/{keyword}/{page}")
+    public ResponseEntity<Page<SaleBook>> getBookByKeyword(@PathVariable String keyword, @PathVariable String page) {
+        return ResponseEntity.ok(saleService.getSearchSaleBooksPageable(Integer.parseInt(page), 6, keyword));
     }
 
     @GetMapping("/lectureReview/{lectureId}")
