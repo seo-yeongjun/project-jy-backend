@@ -87,6 +87,16 @@ public class SaleService {
         return saleBooks;
     }
 
+    public SaleBook getSaleBookById(String id) {
+        SaleBook saleBook = saleBookRepository.findById(Long.valueOf(id)).orElseThrow();
+        Member member = saleBook.getMember();
+        member.setAuthority(null);
+        member.setPassword(null);
+        member.setMemberId(null);
+        saleBook.setMember(member);
+        return saleBook;
+    }
+
     public Page<SaleBook> getSearchSaleBooksPageable(int page, int size, String keyword) {
         Page<SaleBook> saleBooks = saleBookRepository.findAllByBookTitleIsContainingOrLectureTitleIsContaining(keyword, keyword, PageRequest.of(page, size, Sort.Direction.DESC, "date"));
         saleBooks.map(saleBook -> {

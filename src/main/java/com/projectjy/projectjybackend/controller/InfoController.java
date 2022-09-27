@@ -69,6 +69,11 @@ public class InfoController {
         return ResponseEntity.ok(saleService.getSearchSaleBooksPageable(Integer.parseInt(page), 6, keyword));
     }
 
+    @GetMapping("/book/{id}")
+    public ResponseEntity<SaleBook> getBookById(@PathVariable String id) {
+        return ResponseEntity.ok(saleService.getSaleBookById(id));
+    }
+
     @GetMapping("/lectureReview/{lectureId}")
     public ResponseEntity<List<LectureReview>> getLectureReviews(@PathVariable String lectureId) {
         return ResponseEntity.ok(lectureReviewService.getLectureReviewsByLectureId(Long.parseLong(lectureId)));
