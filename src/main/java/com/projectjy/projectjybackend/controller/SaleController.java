@@ -38,4 +38,9 @@ public class SaleController {
     public boolean soldOut(@PathVariable String id) {
         return saleService.soldOutChange(id);
     }
+
+    @PostMapping("/book/update/{id}")
+    public boolean deleteSale(@PathVariable String id) {
+        return saleService.dateUpdate(id);
+    }
 }
