@@ -33,4 +33,5 @@ public class SaleBook {
     private boolean soldOut;
     private String connect;
     private LocalDateTime date;
+    private int view;
 }

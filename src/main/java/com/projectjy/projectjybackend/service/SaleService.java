@@ -112,7 +112,7 @@ public class SaleService {
 
     public List<SaleBook> getSaleHistory(String memberId) {
         Member member = memberRepository.findByMemberId(memberId).orElseThrow();
-        return saleBookRepository.findAllByMemberOrderByIdDesc(member).stream().peek(saleBook -> {
+        return saleBookRepository.findAllByMemberOrderByDateDesc(member).stream().peek(saleBook -> {
             saleBook.getMember().setPassword(null);
             saleBook.getMember().setAuthority(null);
         }).collect(Collectors.toList());
@@ -122,6 +122,28 @@ public class SaleService {
         try {
             SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
             saleBook.setSoldOut(!saleBook.isSoldOut());
+            saleBookRepository.save(saleBook);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean viewIncrease(String id) {
+        try {
+            SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
+            saleBook.setView(saleBook.getView() + 1);
+            saleBookRepository.save(saleBook);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean dateUpdate(String id) {
+        try {
+            SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
+            saleBook.setDate(LocalDateTime.now());
             saleBookRepository.save(saleBook);
             return true;
         } catch (Exception e) {
