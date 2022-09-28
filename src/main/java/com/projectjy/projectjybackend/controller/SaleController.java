@@ -5,6 +5,7 @@ import com.projectjy.projectjybackend.entity.Book;
 import com.projectjy.projectjybackend.entity.Lecture;
 import com.projectjy.projectjybackend.entity.LectureReview;
 import com.projectjy.projectjybackend.entity.SaleBook;
+import com.projectjy.projectjybackend.security.SecurityUtil;
 import com.projectjy.projectjybackend.service.SaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +43,15 @@ public class SaleController {
     @PostMapping("/book/update/{id}")
     public boolean deleteSale(@PathVariable String id) {
         return saleService.dateUpdate(id);
+    }
+
+    @GetMapping("/book/count")
+    public int getBookCount() {
+        return saleService.countBookByMemberId(SecurityUtil.getCurrentId());
+    }
+
+    @GetMapping("/book/view")
+    public int getBookView() {
+        return saleService.getViews(SecurityUtil.getCurrentId());
     }
 }

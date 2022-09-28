@@ -143,11 +143,25 @@ public class SaleService {
     public boolean dateUpdate(String id) {
         try {
             SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
-            saleBook.setDate(LocalDateTime.now());
-            saleBookRepository.save(saleBook);
-            return true;
+            if (LocalDateTime.now().isAfter(saleBook.getDate().plusDays(3))) {
+                saleBook.setDate(LocalDateTime.now());
+                saleBookRepository.save(saleBook);
+                return true;
+            } else
+                return false;
         } catch (Exception e) {
             return false;
         }
     }
+
+    public int countBookByMemberId(Long currentId) {
+        Member member = memberRepository.findById(currentId).orElseThrow();
+        return Math.toIntExact(saleBookRepository.countByMember(member));
+    }
+
+    public int getViews(Long currentId) {
+        Member member = memberRepository.findById(currentId).orElseThrow();
+        return saleBookRepository.findAllByMember(member).stream().mapToInt(SaleBook::getView).sum();
+    }
+
 }
