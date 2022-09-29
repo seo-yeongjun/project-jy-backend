@@ -61,7 +61,7 @@ public class WebSecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(checkMemberInterceptor).addPathPatterns("/sale/**");
+                registry.addInterceptor(checkMemberInterceptor).addPathPatterns("/sale/**","/member/**");
             }
         };
     }

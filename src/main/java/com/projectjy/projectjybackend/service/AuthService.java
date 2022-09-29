@@ -25,11 +25,23 @@ public class AuthService {
     private final TokenProvider tokenProvider;
 
     public MemberResponseDto join(MemberRequestDto requestDto) {
+        if (requestDto.getMemberId() == null || requestDto.getMemberId().equals(""))
+            return MemberResponseDto.message("아이디를 입력해주세요.");
+        if (requestDto.getNickname() == null || requestDto.getNickname().equals(""))
+            return MemberResponseDto.message("닉네임을 입력해주세요.");
+        if (requestDto.getPassword() == null || requestDto.getPassword().equals(""))
+            return MemberResponseDto.message("비밀번호를 입력해주세요.");
+        if (requestDto.getEmail() == null || requestDto.getEmail().equals(""))
+            return MemberResponseDto.message("이메일을 입력해주세요.");
+        if(requestDto.getPassword().length() < 10)
+            return MemberResponseDto.message("비밀번호는 10자 이상이어야 합니다.");
+        if(!requestDto.getPassword().matches("^.*(?=^.{5,10}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$"))
+            return MemberResponseDto.message("비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.");
         if (memberRepository.existsByMemberId(requestDto.getMemberId())) {
-            throw new RuntimeException("이미 존재 하는 아이디 입니다");
+            return MemberResponseDto.message("이미 존재하는 아이디입니다.");
         }
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RuntimeException("이미 존재 하는 이메일 입니다");
+            return MemberResponseDto.message("이미 존재하는 이메일입니다.");
         }
         Member member = requestDto.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));

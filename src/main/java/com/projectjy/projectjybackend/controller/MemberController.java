@@ -1,6 +1,6 @@
 package com.projectjy.projectjybackend.controller;
 
-import com.projectjy.projectjybackend.dto.ChangePasswordDto;
+import com.projectjy.projectjybackend.dto.ChangeResponseDto;
 import com.projectjy.projectjybackend.security.MemberResponseDto;
 import com.projectjy.projectjybackend.security.entity.MemberRequestDto;
 import com.projectjy.projectjybackend.service.MemberService;
@@ -23,14 +23,18 @@ public class MemberController {
         // return ResponseEntity.ok(memberService.getMyInfoBySecurity());
     }
 
-    @PostMapping("/changeNickName")
-    public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody MemberRequestDto request) {
-        return ResponseEntity.ok(memberService.changeMemberNickname(request.getEmail(), request.getNickname()));
+    @PostMapping("/changeNickname")
+    public ResponseEntity<ChangeResponseDto> setMemberNickname(@RequestBody MemberRequestDto request) {
+        return ResponseEntity.ok(memberService.changeMemberNickname(request.getNickname()));
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<MemberResponseDto> setMemberPassword(@RequestBody ChangePasswordDto request) {
+    public ResponseEntity<ChangeResponseDto> setMemberPassword(@RequestBody MemberRequestDto request) {
         return ResponseEntity.ok(memberService.changeMemberPassword(request.getExPassword(), request.getNewPassword()));
     }
 
+    @PostMapping("/changeEmail")
+    public ResponseEntity<ChangeResponseDto> setMemberEmail(@RequestBody MemberRequestDto request) {
+        return ResponseEntity.ok(memberService.changeEmail(request.getEmail()));
+    }
 }

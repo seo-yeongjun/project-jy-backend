@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangePasswordDto {
-    private String memberId;
-    private String exPassword;
-    private String newPassword;
+public class ChangeResponseDto {
+    private String message;
+
+    public static ChangeResponseDto of(String message) {
+        return new ChangeResponseDto(message);
+    }
 }
