@@ -5,6 +5,7 @@ import com.projectjy.projectjybackend.repository.MemberRepository;
 import com.projectjy.projectjybackend.security.MemberResponseDto;
 import com.projectjy.projectjybackend.security.SecurityUtil;
 import com.projectjy.projectjybackend.security.entity.Member;
+import com.projectjy.projectjybackend.security.entity.MemberRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,8 @@ public class MemberService {
             return ChangeResponseDto.of("현재 비밀번호와 동일한 비밀번호입니다");
         if (newPassword.length() < 10)
             return ChangeResponseDto.of("비밀번호는 10자 이상으로 설정해주세요");
-        //비밀번호 영문, 숫자, 특수문자 조합
-        if (newPassword.matches("^.*(?=^.{5,10}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$"))
+        //비밀번호 영문, 숫자, 특수문자 조합 10자 이상
+        if (!newPassword.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{10,}$"))
             return ChangeResponseDto.of("비밀번호는 영문, 숫자, 특수문자 조합으로 설정해주세요");
 
         member.setPassword(passwordEncoder.encode((newPassword)));
@@ -73,5 +74,16 @@ public class MemberService {
         member.setEmail(email);
         memberRepository.save(member);
         return ChangeResponseDto.of("이메일 변경 성공");
+    }
+
+    @Transactional
+    public ChangeResponseDto deleteMember(MemberRequestDto password){
+        Member member = memberRepository.findById(SecurityUtil.getCurrentId()).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+        //Spring Security check password
+        if (!passwordEncoder.matches(password.getPassword(), member.getPassword())){
+            System.out.println(password.getPassword());
+            return ChangeResponseDto.of("비밀번호가 일치하지 않습니다");}
+        memberRepository.delete(member);
+        return ChangeResponseDto.of("회원탈퇴 성공");
     }
 }

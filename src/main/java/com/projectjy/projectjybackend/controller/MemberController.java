@@ -37,4 +37,10 @@ public class MemberController {
     public ResponseEntity<ChangeResponseDto> setMemberEmail(@RequestBody MemberRequestDto request) {
         return ResponseEntity.ok(memberService.changeEmail(request.getEmail()));
     }
+
+    //회원탈퇴
+    @PostMapping("/delete")
+    public ResponseEntity<ChangeResponseDto> deleteMember(@RequestBody MemberRequestDto password) {
+        return ResponseEntity.ok(memberService.deleteMember(password));
+    }
 }

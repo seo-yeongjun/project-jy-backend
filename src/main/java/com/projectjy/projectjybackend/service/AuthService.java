@@ -35,7 +35,7 @@ public class AuthService {
             return MemberResponseDto.message("이메일을 입력해주세요.");
         if(requestDto.getPassword().length() < 10)
             return MemberResponseDto.message("비밀번호는 10자 이상이어야 합니다.");
-        if(!requestDto.getPassword().matches("^.*(?=^.{5,10}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$"))
+        if(!requestDto.getPassword().matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{10,}$"))
             return MemberResponseDto.message("비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.");
         if (memberRepository.existsByMemberId(requestDto.getMemberId())) {
             return MemberResponseDto.message("이미 존재하는 아이디입니다.");
@@ -44,7 +44,8 @@ public class AuthService {
             return MemberResponseDto.message("이미 존재하는 이메일입니다.");
         }
         Member member = requestDto.toMember(passwordEncoder);
-        return MemberResponseDto.of(memberRepository.save(member));
+        memberRepository.save(member);
+        return MemberResponseDto.message("success");
     }
 
     public TokenDto login(MemberRequestDto requestDto) {
