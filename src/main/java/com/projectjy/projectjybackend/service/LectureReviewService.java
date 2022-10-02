@@ -23,4 +23,14 @@ public class LectureReviewService {
             lectureReview.setMember(member);
         }).collect(Collectors.toList());
     }
+
+    public List<LectureReview> getAllLectureReviews() {
+        return lectureReviewRepository.findAll().stream().peek(lectureReview -> {
+            Member member = lectureReview.getMember();
+            member.setPassword(null);
+            member.setMemberId(null);
+            member.setAuthority(null);
+            lectureReview.setMember(member);
+        }).collect(Collectors.toList());
+    }
 }

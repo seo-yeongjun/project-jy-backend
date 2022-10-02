@@ -18,7 +18,9 @@ public class LectureReview {
     @OneToOne
     @JoinColumn(name = "memId")
     private Member member;
-    private Long lectureId;
+    @OneToOne
+    @JoinColumn(name = "lectureId")
+    private Lecture lecture;
     private String content;
     private LocalDateTime date;
 }

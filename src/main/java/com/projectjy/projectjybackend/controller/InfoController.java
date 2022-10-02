@@ -79,6 +79,11 @@ public class InfoController {
         return ResponseEntity.ok(lectureReviewService.getLectureReviewsByLectureId(Long.parseLong(lectureId)));
     }
 
+    @GetMapping("/lectureReview")
+    public ResponseEntity<List<LectureReview>> getAllLectureReviews() {
+        return ResponseEntity.ok(lectureReviewService.getAllLectureReviews());
+    }
+
     @PostMapping("/view/increase/{id}")
     public boolean viewIncrease(@PathVariable String id) {
         return saleService.viewIncrease(id);
