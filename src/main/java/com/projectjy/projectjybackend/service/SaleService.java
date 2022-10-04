@@ -56,6 +56,7 @@ public class SaleService {
             if (review.getContent() != null && !review.getContent().equals("")) {
                 review.setMember(savedMember.get());
                 review.setDate(LocalDateTime.now());
+                review.setLecture(lecture);
                 lectureReviewRepository.save(review);
             }
             saleBookRepository.save(saleBook);
