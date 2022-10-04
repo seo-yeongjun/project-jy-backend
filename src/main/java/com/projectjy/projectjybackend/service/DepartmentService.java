@@ -22,6 +22,6 @@ public class DepartmentService {
     }
 
     public Department getDepartmentById(Long id) {
-        return departmentRepository.getById(id);
+        return departmentRepository.findById(id).get();
     }
 }

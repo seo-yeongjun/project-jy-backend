@@ -7,9 +7,12 @@ import com.projectjy.projectjybackend.entity.LectureReview;
 import com.projectjy.projectjybackend.entity.SaleBook;
 import com.projectjy.projectjybackend.security.SecurityUtil;
 import com.projectjy.projectjybackend.service.SaleService;
+import com.projectjy.projectjybackend.service.UploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,6 +21,7 @@ import java.util.List;
 public class SaleController {
 
     private final SaleService saleService;
+    private final UploadService uploadService;
 
     @PostMapping("/book")
     public boolean bookSale(@RequestBody SaleBookDto saleBookDto) {
@@ -53,5 +57,10 @@ public class SaleController {
     @GetMapping("/book/view")
     public int getBookView() {
         return saleService.getViews(SecurityUtil.getCurrentId());
+    }
+
+    @PostMapping("/book/photo")
+    public String photoUpdate(@RequestPart(value="file",required = true) MultipartFile photo) throws IOException {
+        return uploadService.upload(photo,SecurityUtil.getCurrentId());
     }
 }
