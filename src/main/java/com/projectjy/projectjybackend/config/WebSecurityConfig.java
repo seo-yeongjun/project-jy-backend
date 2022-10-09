@@ -47,10 +47,8 @@ public class WebSecurityConfig {
 
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler)
 
-                .and().authorizeRequests().antMatchers("/auth/**").permitAll()
-                .and().authorizeRequests().antMatchers("/info/**").permitAll()
-                .anyRequest().authenticated()
-
+                .and().authorizeRequests().antMatchers("**","*","/**").permitAll()
+                .and().authorizeRequests().antMatchers("/sale/book/**","/sale/complete/**","/sale/history/**","/member/**","/sale/book/delete/**","/sale/book/edit/**","/sale/book/edit").authenticated()
                 .and().apply(new JwtSecurityConfig(tokenProvider));
 
         return http.build();
@@ -61,7 +59,7 @@ public class WebSecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(checkMemberInterceptor).addPathPatterns("/sale/**","/member/**");
+                registry.addInterceptor(checkMemberInterceptor).addPathPatterns("/sale/book/**","/sale/complete/**","/sale/history/**","/member/**","/sale/book/delete/**","/sale/book/edit/**","/sale/book/edit");
             }
         };
     }
@@ -70,7 +68,7 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(false); // 쿠키를 받을건지
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","192.168.10:3001","http://192.168.10:3002,","http://192.168.10:3000","192.168.10:3003","127.0.0.1:3000","http://192.168.0.2:3000","https://seo-yeongjun.github.io/skhubookstore","http://seo-yeongjun.github.io/skhubookstore/","http://13.124.228.103:3000","13.124.228.103:5000","http://skhubook.store","https://skhubook.store","http://skhubook.store:3000","http://skhubook.store:5000","https://skhubook.store:3000","https://skhubook.store:5000","http://skhubook.store:3000/","http://skhubook.store:5000/","https://skhubook.store:3000/","https://skhubook.store:5000/","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store/**","https://skhubook.store/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://skhubook.store:3000/**","http://skhubook.store:5000/**","https://skhubook.store:3000/**","https://skhubook.store:5000/**","http://3.37.76.20:8087","https://3.37.76.20:8087","http://skhubook.store:8087","https://skhubook.store:8087","https://skhubook.store","https://skhubook.store:80","http://skhubook.store:80","http://skhubook.store","http://skhubook.store:3000/**","http://3.37.76.20","http://3.37.76.20:3000","https://3.37.76.20:3000","https://3.37.76.20","http://skhubook.store:5000","https://skhubook.store:5000"));
+        configuration.setAllowedOrigins(Arrays.asList("https://skhubook.store","http://localhost","https://skhubook.store","http://3.37.76.20:8000","https://3.37.76.20:8000","http://skhubook.store:8000","https://skhubook.store:8000","https://skhubook.store:443")); // 허용할 주소
         configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
         configuration.addAllowedHeader("*");
 

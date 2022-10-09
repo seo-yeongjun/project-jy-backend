@@ -1,5 +1,6 @@
 package com.projectjy.projectjybackend.service;
 
+import com.projectjy.projectjybackend.dto.SaleBookDto;
 import com.projectjy.projectjybackend.entity.Book;
 import com.projectjy.projectjybackend.entity.Lecture;
 import com.projectjy.projectjybackend.entity.LectureReview;
@@ -106,8 +107,8 @@ public class SaleService {
         return saleBooks;
     }
 
-    public List<SaleBook> getSaleHistory(String memberId) {
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow();
+    public List<SaleBook> getSaleHistory(String memberStringId) {
+        Member member = memberRepository.findByMemberId(memberStringId).orElseThrow();
         return saleBookRepository.findAllByMemberOrderByDateDesc(member).stream().peek(saleBook -> {
             saleBook.getMember().setPassword(null);
             saleBook.getMember().setAuthority(null);
@@ -160,4 +161,51 @@ public class SaleService {
         return saleBookRepository.findAllByMember(member).stream().mapToInt(SaleBook::getView).sum();
     }
 
+    public boolean deleteSale(String id, Long memberId) {
+        try {
+            Member member = memberRepository.findById(memberId).orElseThrow();
+            SaleBook saleBook = saleBookRepository.findById(Long.parseLong(id)).orElseThrow();
+            if (saleBook.getMember().getId().equals(member.getId())) {
+                saleBookRepository.delete(saleBook);
+                return true;
+            } else
+                return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public SaleBook getSaleBook(String id, Long memberId) {
+        SaleBook saleBook = saleBookRepository.findById(Long.valueOf(id)).orElseThrow();
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        if (saleBook.getMember().getMemberId().equals(member.getMemberId())) {
+            Member savedMember = saleBook.getMember();
+            savedMember.setPassword(null);
+            savedMember.setAuthority(null);
+            saleBook.setMember(savedMember);
+            return saleBook;
+        } else
+            return null;
+    }
+
+    @Transactional
+    public boolean editSale(SaleBook saleBook, Long memberId) {
+        try {
+            Book savedBook;
+            Member member = memberRepository.findById(memberId).orElseThrow();
+            if (saleBook.getMember().getMemberId().equals(member.getMemberId())) {
+                System.out.println(saleBook.getBook().getCode()+"코드코드");
+                if (bookRepository.existsByCode(saleBook.getBook().getCode()))
+                    savedBook = bookRepository.findByCode(saleBook.getBook().getCode());
+                else
+                    savedBook = bookRepository.save(saleBook.getBook());
+                saleBook.setBook(savedBook);
+                saleBookRepository.save(saleBook);
+                return true;
+            } else
+                return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

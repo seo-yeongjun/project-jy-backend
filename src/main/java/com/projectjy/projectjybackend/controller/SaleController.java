@@ -33,9 +33,24 @@ public class SaleController {
         return saleService.saveSale(book, saleBook, lecture, review, saleBookDto.getMemberId());
     }
 
-    @GetMapping("/history/{memberId}")
-    public List<SaleBook> getSaleHistory(@PathVariable String memberId) {
-        return saleService.getSaleHistory(memberId);
+    @PostMapping("/book/delete/{id}")
+    public boolean bookDelete(@PathVariable String id) {
+        return saleService.deleteSale(id, SecurityUtil.getCurrentId());
+    }
+
+    @GetMapping("/book/edit/{id}")
+    public SaleBook bookEdit(@PathVariable String id) {
+        return saleService.getSaleBook(id, SecurityUtil.getCurrentId());
+    }
+
+    @PostMapping("/book/edit")
+    public boolean bookEdit(@RequestBody SaleBook saleBook) {
+        return saleService.editSale(saleBook, SecurityUtil.getCurrentId());
+    }
+
+    @GetMapping("/history/{memberStringId}")
+    public List<SaleBook> getSaleHistory(@PathVariable String memberStringId) {
+        return saleService.getSaleHistory(memberStringId);
     }
 
     //soldOut change
@@ -60,7 +75,7 @@ public class SaleController {
     }
 
     @PostMapping("/book/photo")
-    public String photoUpdate(@RequestPart(value="file",required = true) MultipartFile photo) throws IOException {
-        return uploadService.upload(photo,SecurityUtil.getCurrentId());
+    public String photoUpdate(@RequestPart(value = "file", required = true) MultipartFile photo) throws IOException {
+        return uploadService.upload(photo, SecurityUtil.getCurrentId());
     }
 }
